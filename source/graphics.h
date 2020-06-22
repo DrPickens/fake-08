@@ -21,7 +21,7 @@
 #define COLOR_14 {255, 119, 168, 255}
 #define COLOR_15 {255, 204, 170, 255}
 
-#define BG_GRAY_COLOR {128, 128, 128, 255}
+#define BG_COLOR {0, 0, 0, 255}
 
 
 class Graphics {
@@ -163,4 +163,3 @@ class Graphics {
 	void cursor(int x, int y, uint8_t col);
 
 };
-

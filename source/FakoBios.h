@@ -46,26 +46,26 @@ function _init()
 	else
 		print("⬅️➡️ to navigate carts")
 		print("🅾️ (a) to load selected cart")
-		print("start to close current cart")
+		print("start and select to close current cart")
 	end
 	print("r to cycle screen sizes")
 	print("l + r to exit")
 	print("")
-	-- 18 pixels from cursor() call, then 
+	-- 18 pixels from cursor() call, then
 	-- 24 more from 4 print calls
 	line=84
 end
 
 function _update60()
 	t+=1
-	
+
 	if btnp(1) then
 		cidx = min((cidx + 1), numcarts)
 	end
 	if btnp(0) then
 		cidx = max((cidx - 1), 0)
 	end
-	
+
 	if btnp(2) then
 		--ls()
 		linebuffer = "ls"
@@ -77,23 +77,23 @@ function _update60()
 		linebuffer = ""
 		runcmd = true
 	end
-	
+
 	if cidx > 0 and cidx <= numcarts then
 		carttoload = carts[cidx]
 		linebuffer = "load " .. carttoload
 	else
 		carttoload = ""
 	end
-	
+
 	if runcmd then
 		--make call to global
 		--load cart here
-		
+
 		if __loadcart and carttoload then
 			__loadcart(carttoload)
 		end
 	end
-		
+
 end
 
 function _draw()

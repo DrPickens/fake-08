@@ -15,13 +15,13 @@
 const uint8_t PicoScreenWidth = 128;
 const uint8_t PicoScreenHeight = 128;
 
-const Color BgGray = BG_GRAY_COLOR;
+const Color BgGray = BG_COLOR;
 
 
 //call initialize to make sure defaults are correct
 Graphics::Graphics(std::string fontdata, PicoRam* memory) {
 	_memory = memory;
-	
+
 	copy_string_to_sprite_memory(fontSpriteData, fontdata);
 
 
@@ -68,7 +68,7 @@ void Graphics::copySpriteToScreen(
 	int spr_w,
 	int spr_h,
 	bool flip_x,
-	bool flip_y) 
+	bool flip_y)
 {
 
 	//note: no clipping yet
@@ -112,7 +112,7 @@ void Graphics::copySpriteToScreen(
 		int nclip = (scr_y + scr_h) - _memory->_gfxState_clip_ye;
 		scr_h -= nclip;
 	}
-	
+
 	int dy = 1;
 	if (flip_y) {
 		spr_y += spr_h - 1;
@@ -129,10 +129,10 @@ void Graphics::copySpriteToScreen(
 				int combinedPixIdx = spr_x / 2 + x / 2;
 				uint8_t bothPix = spr[combinedPixIdx];
 
-				uint8_t c = x % 2 == 0 
+				uint8_t c = x % 2 == 0
 					? bothPix & 0x0f //just first 4 bits
 					: bothPix >> 4;  //just last 4 bits
-					
+
 				if (_memory->_gfxState_transparencyPalette[c] == false) { //if not transparent. Come back later to add palt() support by checking tranparency palette
 					_private_pset(scr_x + x, scr_y + y, c); //set color on framebuffer. Come back later and add pal() by translating color
 				}
@@ -143,10 +143,10 @@ void Graphics::copySpriteToScreen(
 				int combinedPixIdx = pixIndex / 2;
 				uint8_t bothPix = spr[combinedPixIdx];
 
-				uint8_t c = x % 2 == 0 
+				uint8_t c = x % 2 == 0
 					? bothPix >> 4 //just first 4 bits
 					: bothPix & 0x0f;  //just last 4 bits
-					
+
 				if (_memory->_gfxState_transparencyPalette[c] == false) { //if not transparent. Come back later to add palt() support by checking tranparency palette
 					_private_pset(scr_x + x, scr_y + y, c); //set color on framebuffer. Come back later and add pal() by translating color
 				}
@@ -168,7 +168,7 @@ void Graphics::copyStretchSpriteToScreen(
 	int scr_w,
 	int scr_h,
 	bool flip_x,
-	bool flip_y) 
+	bool flip_y)
 {
 	if (false || (spr_h == scr_h && spr_w == scr_w)) {
 		// use faster non stretch blitter if sprite is not stretched
@@ -237,7 +237,7 @@ void Graphics::copyStretchSpriteToScreen(
 				int combinedPixIdx = ((pixIndex / 2) >> 16) & 0x7f;
 				uint8_t bothPix = spr[combinedPixIdx];
 
-				uint8_t c = (pixIndex >> 16) % 2 == 0 
+				uint8_t c = (pixIndex >> 16) % 2 == 0
 					? bothPix & 0x0f //just first 4 bits
 					: bothPix >> 4;  //just last 4 bits
 				if (_memory->_gfxState_transparencyPalette[c] == false) {
@@ -250,7 +250,7 @@ void Graphics::copyStretchSpriteToScreen(
 				int combinedPixIdx = ((pixIndex / 2) >> 16) & 0x7f;
 				uint8_t bothPix = spr[combinedPixIdx];
 
-				uint8_t c = (pixIndex >> 16) % 2 == 0 
+				uint8_t c = (pixIndex >> 16) % 2 == 0
 					? bothPix >> 4 //just first 4 bits
 					: bothPix & 0x0f;  //just last 4 bits
 				if (_memory->_gfxState_transparencyPalette[c] == false) {
@@ -291,30 +291,30 @@ void Graphics::sortCoordsForRect(int *x1, int *y1, int *x2, int *y2){
 }
 
 bool Graphics::isOnScreen(int x, int y) {
-	return 
-		x >= 0 && 
-		x <= 127 && 
-		y >= 0 && 
+	return
+		x >= 0 &&
+		x <= 127 &&
+		y >= 0 &&
 		y <= 127;
 }
 
 bool Graphics::isWithinClip(int x, int y) {
-	return 
-		x >= _memory->_gfxState_clip_xb && 
-		x <= _memory->_gfxState_clip_xe && 
-		y >= _memory->_gfxState_clip_yb && 
+	return
+		x >= _memory->_gfxState_clip_xb &&
+		x <= _memory->_gfxState_clip_xe &&
+		y >= _memory->_gfxState_clip_yb &&
 		y <= _memory->_gfxState_clip_ye;
 }
 
 bool Graphics::isXWithinClip(int x) {
-	return 
-		x >= _memory->_gfxState_clip_xb && 
+	return
+		x >= _memory->_gfxState_clip_xb &&
 		x <= _memory->_gfxState_clip_xe;
 }
 
 bool Graphics::isYWithinClip(int y) {
-	return 
-		y >= _memory->_gfxState_clip_yb && 
+	return
+		y >= _memory->_gfxState_clip_yb &&
 		y <= _memory->_gfxState_clip_ye;
 }
 
@@ -412,7 +412,7 @@ void Graphics::_private_h_line (int x1, int x2, int y, uint8_t col){
 	int maxx = clampCoordToScreenDims(std::max(x1, x2));
 	int minx = clampCoordToScreenDims(std::min(x1, x2));
 
-	
+
 	//possible todo: check if memset is any better here? this seems to be wrong
 	//uint8_t* fb_line = _pico8_fb + y * PicoScreenWidth;
 	//memset(fb_line + minx, col, maxx - minx);
@@ -448,7 +448,7 @@ void Graphics::line(int x0, int y0, int x1, int y1, uint8_t col) {
 	//vertical line
 	if (x0 == x1) {
 		_private_v_line(y0, y1, x0, col);
-	} 
+	}
 	else if (y0 == y1) {
 		_private_h_line(x0, x1, y0, col);
 	}
@@ -549,7 +549,7 @@ void Graphics::circfill(int ox, int oy, int r, uint8_t col){
 				err += ++y * 2 + 1;
 		} while (x < 0);
 	}
-	
+
 }
 
 void Graphics::rect(int x1, int y1, int x2, int y2) {
@@ -644,7 +644,7 @@ void Graphics::spr(
 	double w = 1.0,
 	double h = 1.0,
 	bool flip_x = false,
-	bool flip_y = false) 
+	bool flip_y = false)
 {
 	int spr_x = (n % 16) * 8;
 	int spr_y = (n / 16) * 8;
@@ -692,10 +692,10 @@ uint8_t Graphics::sget(uint8_t x, uint8_t y){
 
 	uint8_t combinedPix = _memory->spriteSheetData[combinedIdx];
 
-	uint8_t c = x % 2 == 0 
+	uint8_t c = x % 2 == 0
 		? combinedPix & 0x0f //just first 4 bits
 		: combinedPix >> 4;  //just last 4 bits
-	
+
 	return c;
 }
 
@@ -821,4 +821,3 @@ void Graphics::cursor(int x, int y, uint8_t col) {
 
 	this->cursor(x, y);
 }
-

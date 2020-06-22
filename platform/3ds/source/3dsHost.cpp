@@ -36,7 +36,7 @@ const int PicoScreenWidth = 128;
 const int PicoScreenHeight = 128;
 
 
-StretchOption stretch = StretchAndOverflow;
+StretchOption stretch = StretchToFit;
 u64 last_time;
 u64 now_time;
 u64 frame_time;
@@ -132,7 +132,7 @@ void audioSetup(){
         audioCleanup();
         return;
     }
-	
+
 
 	ndspSetOutputMode(NDSP_OUTPUT_STEREO);
 
@@ -177,7 +177,7 @@ void Host::oneTimeSetup(){
     audioSetup();
 
     gfxInitDefault();
-    
+
     last_time = 0;
     now_time = 0;
     frame_time = 0;
@@ -286,7 +286,7 @@ void Host::drawFrame(uint8_t* picoFb, uint8_t* screenPaletteMap, Color* paletteC
 
         int xOffset = __3ds_TopScreenWidth / 2 - stretchedWidth / 2;
         int yOffset = 0;
-        
+
         for(x = 0; x < stretchedWidth; x++) {
             for(y = 0; y < __3ds_TopScreenHeight; y++) {
                 int picoX = (int)(x / ratio);
@@ -393,6 +393,6 @@ vector<string> Host::listcarts(){
         closedir(dir);
     }
 
-    
+
     return carts;
 }

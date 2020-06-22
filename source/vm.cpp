@@ -25,7 +25,7 @@ Vm::Vm(){
     auto fontdata = get_font_data();
 
     _memory = {0};
-    
+
 
     Logger::Write("Creating Graphics object\n");
     Graphics* graphics = new Graphics(fontdata, &_memory);
@@ -290,7 +290,7 @@ void Vm::UpdateAndDraw(
         lua_getglobal(_luaState, "_draw");
 
         lua_call(_luaState, 0, 0);
-        
+
         //pop the update fuction off the stack now that we're done with it
         lua_pop(_luaState, 0);
     }
@@ -298,7 +298,7 @@ void Vm::UpdateAndDraw(
     _picoFrameCount++;
 
     //todo: pause menu here, but for now just load bios
-    if (kdown & P8_KEY_PAUSE) {
+    if (kdown & P8_KEY_PAUSE & P8_KEY_7) {
         QueueCartChange("__FAKE08-BIOS.p8");
     }
 
@@ -332,7 +332,7 @@ void Vm::CloseCart() {
         delete _loadedCart;
         _loadedCart = nullptr;
     }
-    
+
     if (_luaState) {
         Logger::Write("closing lua state\n");
         lua_close(_luaState);
