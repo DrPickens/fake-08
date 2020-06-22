@@ -10,6 +10,8 @@ export INCLUDES  = ../../include ../../libs/lua-5.3.2/src ../../libs/utf8-util .
 
 all: 3ds switch
 
+3ds-full: 3ds cia
+
 clean: clean-3ds clean-switch
 
 clean-3ds:
